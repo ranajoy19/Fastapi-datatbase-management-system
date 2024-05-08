@@ -14,3 +14,6 @@ pip install alembic
 
 # add dummy data to db using sqlalchemy session
 
+
+# create a file named test_views.py to test some api responses cases
+# 1) you can RUN it using terminal by typing "pytest" navigate to right path 
