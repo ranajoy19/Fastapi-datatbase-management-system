@@ -1,11 +1,14 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
+from datetime import datetime
+
 
 # Pydantic schema for the User model
 class UserSchema(BaseModel):
     id: int
     name: str
     email: str
+    created_at: datetime = datetime.now()
 
     class Config:
         orm_mode = True

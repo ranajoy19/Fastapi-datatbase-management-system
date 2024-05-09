@@ -1,5 +1,6 @@
-from sqlalchemy import  Column, Integer, String, ForeignKey, Table
+from sqlalchemy import  Column, Integer, String, ForeignKey, Table,TIMESTAMP 
 from sqlalchemy.orm import relationship
+import datetime 
 
 from database import Base
 
@@ -8,10 +9,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    email = Column(String, unique=True, index=True)
+    email_address = Column(String, unique=True, index=True)
     posts = relationship("Post", back_populates="author")
     likes = relationship("Like", back_populates="user")
-
+    created_at = Column(TIMESTAMP,  
+                        default=datetime.datetime.now) 
 
 class Post(Base):
     __tablename__ = "posts"
@@ -31,8 +33,8 @@ class Post(Base):
 class Comment(Base):
     __tablename__ = "comments"
 
-    id = Column(Integer, primary_key=True, index=True)
-    text = Column(String)
+    id = Column(String, primary_key=True, index=True)
+    text_area = Column(String)
     post_id = Column(Integer, ForeignKey("posts.id"))
     post = relationship("Post", back_populates="comments")
 

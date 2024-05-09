@@ -1,10 +1,9 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.models import User, Post
 from views import router,get_db
 from main import app
 from fastapi.testclient import TestClient
-from schema import UserSchema, PostSchema
+from schema import UserSchema
 
 
 client = TestClient(app)

@@ -10,6 +10,7 @@ load_dotenv()
 # get the data from .env
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+# DATABASE_URL = "postgresql://postgres:lavalava@localhost/databaseManagement"
 
 engine = create_engine(DATABASE_URL)
 
