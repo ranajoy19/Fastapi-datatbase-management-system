@@ -34,3 +34,51 @@ pip install alembic
 # like that we will write upto g
 
 # than create a auto migrations script to run those migrations manuallly
+
+
+
+
+
+## Setup Instructions
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/ranajoy19/Fastapi-datatbase-management-system.git
+cd Fastapi-datatbase-management-system
+
+### Step 2: create .env file
+
+Create a .env file in the root of the project with the following content:
+DATABASE_URL = youtdbUrl
+POSTGRES_DB=yourdbname
+POSTGRES_USER=yourdbuser
+POSTGRES_PASSWORD=yourdbpassword
+
+
+Step 3: Build and Run the Containers
+
+Use Docker Compose to build and start the containers:
+
+docker-compose up --build
+
+
+This command will:
+
+Build the Docker images.
+Start the FastAPI application.
+Start a PostgreSQL database container.
+
+
+Step 4: Access the Application
+Once the containers are up and running, you can access the FastAPI application at:
+
+http://localhost:8000
+
+
+
+Database Migrations
+To apply database migrations:
+
+docker-compose exec app alembic upgrade head
+

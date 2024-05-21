@@ -1,69 +1,65 @@
-from sqlalchemy import  Column, Integer, String, ForeignKey, Table,TIMESTAMP 
-from sqlalchemy.orm import relationship
-import datetime 
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, TIMESTAMP
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+import datetime
 
 from database import Base
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    email_address = Column(String, unique=True, index=True)
-    posts = relationship("Post", back_populates="author")
-    likes = relationship("Like", back_populates="user")
-    created_at = Column(TIMESTAMP,  
-                        default=datetime.datetime.now) 
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, index=True)
+    email_address: Mapped[str] = mapped_column(String, unique=True, index=True)
+    posts: Mapped[list["Post"]] = relationship("Post", back_populates="author")
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates="user")
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        TIMESTAMP, default=datetime.datetime.now
+    )
 
 class Post(Base):
     __tablename__ = "posts"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    content = Column(String)
-    author_id = Column(Integer, ForeignKey("users.id"))
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String, index=True)
+    content: Mapped[str] = mapped_column(String)
+    author_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
 
-    author = relationship("User", back_populates="posts")
-    comments = relationship("Comment", back_populates="post")
-    categories = relationship("Category", secondary="post_category")
-    tags = relationship("Tag", secondary="post_tag")
-    likes = relationship("Like", back_populates="post")
-
+    author: Mapped["User"] = relationship("User", back_populates="posts")
+    comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="post")
+    categories: Mapped[list["Category"]] = relationship("Category", secondary="post_category")
+    tags: Mapped[list["Tag"]] = relationship("Tag", secondary="post_tag")
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates="post")
 
 class Comment(Base):
     __tablename__ = "comments"
 
-    id = Column(String, primary_key=True, index=True)
-    text_area = Column(String)
-    post_id = Column(Integer, ForeignKey("posts.id"))
-    post = relationship("Post", back_populates="comments")
-
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    text_area: Mapped[str] = mapped_column(String)
+    post_id: Mapped[int] = mapped_column(Integer, ForeignKey("posts.id"))
+    post: Mapped["Post"] = relationship("Post", back_populates="comments")
 
 class Category(Base):
     __tablename__ = "categories"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    posts = relationship("Post", secondary="post_category")
-
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, index=True)
+    posts: Mapped[list["Post"]] = relationship("Post", secondary="post_category")
 
 class Tag(Base):
     __tablename__ = "tags"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    posts = relationship("Post", secondary="post_tag")
-
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, index=True)
+    posts: Mapped[list["Post"]] = relationship("Post", secondary="post_tag")
 
 class Like(Base):
     __tablename__ = "likes"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    post_id = Column(Integer, ForeignKey("posts.id"))
-    user = relationship("User", back_populates="likes")
-    post = relationship("Post", back_populates="likes")
-
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    post_id: Mapped[int] = mapped_column(Integer, ForeignKey("posts.id"))
+    user: Mapped["User"] = relationship("User", back_populates="likes")
+    post: Mapped["Post"] = relationship("Post", back_populates="likes")
 
 post_category = Table(
     "post_category",
